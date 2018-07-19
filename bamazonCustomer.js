@@ -52,13 +52,19 @@ function showItems() {
             }
           ])
           .then(function(answer) {
-            // 7. Once the customer has placed the order, your application should check if your store has enough of the product to meet the customer's request.
+            var item = answer.choice;
+              connection.query('SELECT `quanity` FROM `products` WHERE `name`=' + connection.escape(item), function(err, results) {
+                if (err) throw err;
 
-            //    * If not, the app should log a phrase like `Insufficient quantity!`, and then prevent the order from going through.
-
-            // 8. However, if your store _does_ have enough of the product, you should fulfill the customer's order.
+            if(answer.quanity > results){
+              console.log("That item is out of stock! There are only " + results + "(s) " + item + " left.")
+            }
+            else{
+                // 8. However, if your store _does_ have enough of the product, you should fulfill the customer's order.
             //    * This means updating the SQL database to reflect the remaining quantity.
             //    * Once the update goes through, show the customer the total cost of their purchase.
-            });
+            }
+          });
         });
+      });
     }
