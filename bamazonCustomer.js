@@ -53,13 +53,19 @@ function showItems() {
           ])
           .then(function(answer) {
             var item = answer.choice;
-              connection.query('SELECT `quanity` FROM `products` WHERE `name`=' + connection.escape(item), function(err, results) {
+              connection.query('SELECT `quanity` `price` FROM `products` WHERE `name`=' + connection.escape(item), function(err, results) {
                 if (err) throw err;
-
-            if(answer.quanity > results){
-              console.log("That item is out of stock! There are only " + results + "(s) " + item + " left.")
+                for(var i = 0; i < results.length; i++){
+                currentQuanity = results[i].quanity;
+                currentPrice = results[i].price;
+                }
+                  console.log(currentPrice);
+            
+                if(answer.quanity > currentQuanity){
+              console.log("That item is out of stock! There are only " + currentQuanity + " " + item + "(s) left.")
             }
             else{
+              console.log("You just bought " + answer.quanity + " " + item + "(s).");
                 // 8. However, if your store _does_ have enough of the product, you should fulfill the customer's order.
             //    * This means updating the SQL database to reflect the remaining quantity.
             //    * Once the update goes through, show the customer the total cost of their purchase.
